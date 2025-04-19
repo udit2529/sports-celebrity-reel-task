@@ -3,6 +3,8 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+// Import the BottomNav component
+import BottomNav from "@/components/layout/bottom-nav"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
     generator: 'v0.dev'
 }
 
+// Update the layout to include BottomNav
 export default function RootLayout({
   children,
 }: {
@@ -23,6 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
+          <BottomNav />
         </ThemeProvider>
       </body>
     </html>

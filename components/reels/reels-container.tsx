@@ -70,7 +70,7 @@ export default function ReelsContainer({ initialReels }: ReelsContainerProps) {
   return (
     <div
       ref={containerRef}
-      className="w-full h-screen overflow-y-scroll snap-y snap-mandatory"
+      className="w-full h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
       style={{ scrollSnapType: "y mandatory" }}
     >
       {reels.map((reel, index) => (

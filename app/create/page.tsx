@@ -13,6 +13,8 @@ export default function CreateReel() {
   const [selectedCelebrity, setSelectedCelebrity] = useState<Celebrity | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Add a loading state and progress indicator
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     const searchCelebrities = async () => {
@@ -44,13 +46,26 @@ export default function CreateReel() {
     setSearchResults([])
   }
 
+  // Update the handleGenerateReel function to show progress
   const handleGenerateReel = async () => {
     if (!selectedCelebrity) return
 
     setIsGenerating(true)
     setError(null)
+    setProgress(0)
 
     try {
+      // Simulate progress updates
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(progressInterval)
+            return prev
+          }
+          return prev + 10
+        })
+      }, 1000)
+
       const response = await fetch("/api/reels", {
         method: "POST",
         headers: {
@@ -59,11 +74,16 @@ export default function CreateReel() {
         body: JSON.stringify({ celebrity: selectedCelebrity }),
       })
 
+      clearInterval(progressInterval)
+      setProgress(100)
+
       if (!response.ok) {
         const data = await response.json()
         throw new Error(data.error || "Failed to generate reel")
       }
 
+      // Wait a moment to show 100% progress
+      await new Promise((resolve) => setTimeout(resolve, 500))
       router.push("/")
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unknown error occurred")
@@ -123,13 +143,30 @@ export default function CreateReel() {
               Change celebrity
             </button>
 
-            <button
-              onClick={handleGenerateReel}
-              disabled={isGenerating}
-              className="w-full py-3 bg-blue-600 rounded-lg font-medium disabled:opacity-50 mt-4"
-            >
-              {isGenerating ? "Generating Reel..." : "Generate Reel"}
-            </button>
+            {isGenerating ? (
+              <div className="space-y-2">
+                <div className="w-full bg-gray-700 rounded-full h-2.5">
+                  <div
+                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <div className="text-sm text-gray-400 text-center">
+                  {progress < 30 && "Generating script..."}
+                  {progress >= 30 && progress < 60 && "Creating audio..."}
+                  {progress >= 60 && progress < 90 && "Producing video..."}
+                  {progress >= 90 && "Finalizing reel..."}
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleGenerateReel}
+                disabled={isGenerating}
+                className="w-full py-3 bg-blue-600 rounded-lg font-medium disabled:opacity-50 mt-4"
+              >
+                Generate Reel
+              </button>
+            )}
           </div>
         )}
       </div>
