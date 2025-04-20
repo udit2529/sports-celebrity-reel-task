@@ -19,12 +19,12 @@ export default function SearchPage() {
 
   // Popular search suggestions
   const popularSearches = [
+    "Cricket stars",
+    "Bollywood actors",
+    "Indian celebrities",
     "Basketball legends",
-    "Olympic gold medalists",
-    "NFL quarterbacks",
     "Tennis champions",
     "Soccer stars",
-    "NBA MVPs",
     "World Cup winners",
   ]
 
@@ -61,21 +61,27 @@ export default function SearchPage() {
       imageUrl: "/placeholder.svg?height=40&width=40",
     },
     {
-      id: "106",
-      name: "LeBron James",
-      sport: "Basketball",
+      id: "201",
+      name: "Virat Kohli",
+      sport: "Cricket",
       imageUrl: "/placeholder.svg?height=40&width=40",
     },
     {
-      id: "107",
-      name: "Cristiano Ronaldo",
-      sport: "Soccer",
+      id: "202",
+      name: "MS Dhoni",
+      sport: "Cricket",
       imageUrl: "/placeholder.svg?height=40&width=40",
     },
     {
-      id: "108",
-      name: "Roger Federer",
-      sport: "Tennis",
+      id: "203",
+      name: "Rohit Sharma",
+      sport: "Cricket",
+      imageUrl: "/placeholder.svg?height=40&width=40",
+    },
+    {
+      id: "301",
+      name: "Akshay Kumar",
+      sport: "Acting",
       imageUrl: "/placeholder.svg?height=40&width=40",
     },
   ]
@@ -272,22 +278,81 @@ export default function SearchPage() {
           </div>
         )}
 
-        {/* Trending Searches */}
+        {/* Featured Categories */}
         {!searchQuery && !searchResults.length && (
           <div className="mb-6">
             <div className="flex items-center mb-2">
               <TrendingUp className="h-4 w-4 text-gray-400 mr-2" />
-              <h3 className="text-sm font-medium text-gray-400">Trending</h3>
+              <h3 className="text-sm font-medium text-gray-400">Featured Categories</h3>
             </div>
             <div className="flex flex-wrap gap-2">
-              {popularSearches.slice(0, 5).map((search, index) => (
-                <button
-                  key={index}
-                  className="px-3 py-1 bg-gray-800 rounded-full text-sm hover:bg-gray-700"
-                  onClick={() => handleSuggestionSelect(search)}
+              <button
+                className="px-3 py-1 bg-gray-800 rounded-full text-sm hover:bg-gray-700"
+                onClick={() => handleSuggestionSelect("Cricket")}
+              >
+                Cricket
+              </button>
+              <button
+                className="px-3 py-1 bg-gray-800 rounded-full text-sm hover:bg-gray-700"
+                onClick={() => handleSuggestionSelect("Bollywood")}
+              >
+                Bollywood
+              </button>
+              <button
+                className="px-3 py-1 bg-gray-800 rounded-full text-sm hover:bg-gray-700"
+                onClick={() => handleSuggestionSelect("Indian")}
+              >
+                Indian Stars
+              </button>
+              <button
+                className="px-3 py-1 bg-gray-800 rounded-full text-sm hover:bg-gray-700"
+                onClick={() => handleSuggestionSelect("Basketball")}
+              >
+                Basketball
+              </button>
+              <button
+                className="px-3 py-1 bg-gray-800 rounded-full text-sm hover:bg-gray-700"
+                onClick={() => handleSuggestionSelect("Tennis")}
+              >
+                Tennis
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Popular Celebrities */}
+        {!searchQuery && !searchResults.length && (
+          <div className="mb-6">
+            <h3 className="text-sm font-medium text-gray-400 mb-3">Popular Celebrities</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {mockCelebrities.slice(0, 6).map((celebrity) => (
+                <div
+                  key={celebrity.id}
+                  className="p-3 bg-gray-800 rounded-lg hover:bg-gray-700 cursor-pointer"
+                  onClick={() => handleCelebritySelect(celebrity)}
                 >
-                  {search}
-                </button>
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700">
+                      {celebrity.imageUrl ? (
+                        <Image
+                          src={celebrity.imageUrl || "/placeholder.svg"}
+                          alt={celebrity.name}
+                          width={40}
+                          height={40}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                          {celebrity.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-medium text-sm">{celebrity.name}</div>
+                      <div className="text-xs text-gray-400">{celebrity.sport}</div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>

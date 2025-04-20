@@ -1,21 +1,33 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, LogOut } from "lucide-react"
 import Link from "next/link"
+import { useAuth } from "@/context/auth-context"
 
 export default function SettingsPage() {
   const router = useRouter()
+  const { user, logout } = useAuth()
   const [darkMode, setDarkMode] = useState(true)
   const [autoplay, setAutoplay] = useState(true)
   const [notifications, setNotifications] = useState(true)
 
-  const handleLogout = () => {
-    // In a real app, this would clear the user's session
-    if (confirm("Are you sure you want to log out?")) {
-      router.push("/")
+  useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!user) {
+      router.push("/auth/login")
     }
+  }, [user, router])
+
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to log out?")) {
+      logout()
+    }
+  }
+
+  if (!user) {
+    return null // Will redirect in useEffect
   }
 
   return (

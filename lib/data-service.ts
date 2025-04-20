@@ -10,7 +10,7 @@ export async function getReels(limit = 10, offset = 0): Promise<Reel[]> {
         id: "101",
         name: "Michael Jordan",
         sport: "Basketball",
-        imageUrl: "/placeholder.svg?height=40&width=40",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Michael_Jordan_in_2014.jpg",
       },
       videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", // Placeholder
       thumbnailUrl: "/placeholder.svg?height=720&width=405",
@@ -25,38 +25,74 @@ export async function getReels(limit = 10, offset = 0): Promise<Reel[]> {
     {
       id: "2",
       celebrity: {
-        id: "102",
-        name: "Serena Williams",
-        sport: "Tennis",
-        imageUrl: "/placeholder.svg?height=40&width=40",
+        id: "201",
+        name: "Virat Kohli",
+        sport: "Cricket",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Virat_Kohli.jpg",
       },
-      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", // Placeholder
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", // Placeholder
       thumbnailUrl: "/placeholder.svg?height=720&width=405",
       description:
-        "The incredible story of Serena Williams dominating tennis for over two decades with 23 Grand Slam singles titles.",
-      likes: 12453,
-      comments: 231,
+        "The journey of Virat Kohli from a young Delhi cricketer to becoming one of the greatest batsmen in cricket history, with numerous records and achievements for India.",
+      likes: 25678,
+      comments: 789,
       createdAt: new Date().toISOString(),
-      duration: 28,
-      tags: ["tennis", "grandslam", "legend"],
+      duration: 35,
+      tags: ["cricket", "india", "batsman"],
     },
     {
       id: "3",
       celebrity: {
-        id: "103",
-        name: "Lionel Messi",
-        sport: "Soccer",
-        imageUrl: "/placeholder.svg?height=40&width=40",
+        id: "202",
+        name: "MS Dhoni",
+        sport: "Cricket",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d9/MS_Dhoni_in_2011.jpg",
       },
-      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", // Placeholder
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Placeholder
       thumbnailUrl: "/placeholder.svg?height=720&width=405",
       description:
-        "From La Masia to becoming one of the greatest footballers of all time with 7 Ballon d'Or awards and a World Cup victory.",
-      likes: 18932,
-      comments: 542,
+        "The remarkable story of MS Dhoni, from a railway ticket collector to India's most successful captain, leading the team to World Cup, Champions Trophy, and T20 World Cup victories.",
+      likes: 23456,
+      comments: 678,
       createdAt: new Date().toISOString(),
-      duration: 32,
-      tags: ["soccer", "football", "worldcup"],
+      duration: 33,
+      tags: ["cricket", "india", "captain"],
+    },
+    {
+      id: "4",
+      celebrity: {
+        id: "203",
+        name: "Rohit Sharma",
+        sport: "Cricket",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/36/Rohit_Sharma_2023.jpg",
+      },
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", // Placeholder
+      thumbnailUrl: "/placeholder.svg?height=720&width=405",
+      description:
+        "Rohit Sharma's rise to becoming one of cricket's most explosive batsmen and successful captains, known for his record-breaking ODI double centuries.",
+      likes: 19876,
+      comments: 543,
+      createdAt: new Date().toISOString(),
+      duration: 31,
+      tags: ["cricket", "india", "hitman"],
+    },
+    {
+      id: "5",
+      celebrity: {
+        id: "301",
+        name: "Akshay Kumar",
+        sport: "Acting",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Akshay_Kumar.jpg",
+      },
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", // Placeholder
+      thumbnailUrl: "/placeholder.svg?height=720&width=405",
+      description:
+        "The inspiring journey of Akshay Kumar from martial artist to becoming one of Bollywood's most successful actors, known for his discipline and versatility.",
+      likes: 21345,
+      comments: 654,
+      createdAt: new Date().toISOString(),
+      duration: 34,
+      tags: ["bollywood", "actor", "action"],
     },
   ]
 
@@ -78,22 +114,40 @@ export async function getCelebrity(id: string): Promise<Celebrity | null> {
       id: "101",
       name: "Michael Jordan",
       sport: "Basketball",
-      imageUrl: "/placeholder.svg?height=40&width=40",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Michael_Jordan_in_2014.jpg",
       description: "Widely regarded as the greatest basketball player of all time.",
     },
     {
-      id: "102",
-      name: "Serena Williams",
-      sport: "Tennis",
-      imageUrl: "/placeholder.svg?height=40&width=40",
-      description: "One of the greatest tennis players of all time with 23 Grand Slam singles titles.",
+      id: "201",
+      name: "Virat Kohli",
+      sport: "Cricket",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Virat_Kohli.jpg",
+      description:
+        "Indian cricket superstar known for his aggressive batting and leadership, considered one of the greatest batsmen of all time.",
     },
     {
-      id: "103",
-      name: "Lionel Messi",
-      sport: "Soccer",
-      imageUrl: "/placeholder.svg?height=40&width=40",
-      description: "Argentine professional footballer widely regarded as one of the greatest players of all time.",
+      id: "202",
+      name: "MS Dhoni",
+      sport: "Cricket",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d9/MS_Dhoni_in_2011.jpg",
+      description:
+        "Former Indian cricket team captain known for his calm demeanor and finishing abilities, led India to multiple World Cup victories.",
+    },
+    {
+      id: "203",
+      name: "Rohit Sharma",
+      sport: "Cricket",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/36/Rohit_Sharma_2023.jpg",
+      description:
+        "Indian cricket team captain and opening batsman known for his elegant batting style and record-breaking ODI double centuries.",
+    },
+    {
+      id: "301",
+      name: "Akshay Kumar",
+      sport: "Acting",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Akshay_Kumar.jpg",
+      description:
+        "Bollywood superstar known for his action roles, discipline, and versatility across various film genres.",
     },
   ]
 
@@ -107,31 +161,44 @@ export async function searchCelebrities(query: string): Promise<Celebrity[]> {
       id: "101",
       name: "Michael Jordan",
       sport: "Basketball",
-      imageUrl: "/placeholder.svg?height=40&width=40",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Michael_Jordan_in_2014.jpg",
     },
     {
-      id: "102",
-      name: "Serena Williams",
-      sport: "Tennis",
-      imageUrl: "/placeholder.svg?height=40&width=40",
+      id: "201",
+      name: "Virat Kohli",
+      sport: "Cricket",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Virat_Kohli.jpg",
     },
     {
-      id: "103",
-      name: "Lionel Messi",
-      sport: "Soccer",
-      imageUrl: "/placeholder.svg?height=40&width=40",
+      id: "202",
+      name: "MS Dhoni",
+      sport: "Cricket",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d9/MS_Dhoni_in_2011.jpg",
+    },
+    {
+      id: "203",
+      name: "Rohit Sharma",
+      sport: "Cricket",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/36/Rohit_Sharma_2023.jpg",
+    },
+    {
+      id: "301",
+      name: "Akshay Kumar",
+      sport: "Acting",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Akshay_Kumar.jpg",
     },
     {
       id: "104",
       name: "Usain Bolt",
       sport: "Track & Field",
-      imageUrl: "/placeholder.svg?height=40&width=40",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Usain_Bolt_smiling_Berlin_2009.JPG/800px-Usain_Bolt_smiling_Berlin_2009.JPG",
     },
     {
       id: "105",
       name: "Tom Brady",
       sport: "American Football",
-      imageUrl: "/placeholder.svg?height=40&width=40",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Tom_Brady_2019.jpg/800px-Tom_Brady_2019.jpg",
     },
   ]
 

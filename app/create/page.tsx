@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search } from "lucide-react"
+import { Search, User, BirdIcon as Cricket, Film } from "lucide-react"
 import type { Celebrity } from "@/lib/types"
 import Header from "@/components/layout/header"
+import Image from "next/image"
 
 export default function CreateReel() {
   const router = useRouter()
@@ -15,6 +16,38 @@ export default function CreateReel() {
   const [error, setError] = useState<string | null>(null)
   // Add a loading state and progress indicator
   const [progress, setProgress] = useState(0)
+  const [featuredCelebrities, setFeaturedCelebrities] = useState<Celebrity[]>([])
+
+  useEffect(() => {
+    // In a real app, fetch featured celebrities from an API
+    // For now, we'll use mock data
+    setFeaturedCelebrities([
+      {
+        id: "201",
+        name: "Virat Kohli",
+        sport: "Cricket",
+        imageUrl: "/placeholder.svg?height=40&width=40",
+      },
+      {
+        id: "202",
+        name: "MS Dhoni",
+        sport: "Cricket",
+        imageUrl: "/placeholder.svg?height=40&width=40",
+      },
+      {
+        id: "203",
+        name: "Rohit Sharma",
+        sport: "Cricket",
+        imageUrl: "/placeholder.svg?height=40&width=40",
+      },
+      {
+        id: "301",
+        name: "Akshay Kumar",
+        sport: "Acting",
+        imageUrl: "/placeholder.svg?height=40&width=40",
+      },
+    ])
+  }, [])
 
   useEffect(() => {
     const searchCelebrities = async () => {
@@ -102,7 +135,7 @@ export default function CreateReel() {
         {error && <div className="bg-red-500/20 border border-red-500 p-3 rounded mb-4">{error}</div>}
 
         {!selectedCelebrity ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400" />
@@ -130,12 +163,102 @@ export default function CreateReel() {
                 ))}
               </div>
             )}
+
+            {/* Featured Celebrities */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-gray-400">Featured Celebrities</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {featuredCelebrities.map((celebrity) => (
+                  <div
+                    key={celebrity.id}
+                    className="p-3 bg-gray-800 rounded-lg hover:bg-gray-700 cursor-pointer"
+                    onClick={() => handleCelebritySelect(celebrity)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-700">
+                        {celebrity.imageUrl ? (
+                          <Image
+                            src={celebrity.imageUrl || "/placeholder.svg"}
+                            alt={celebrity.name}
+                            width={48}
+                            height={48}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                            {celebrity.name.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-medium">{celebrity.name}</div>
+                        <div className="text-xs text-gray-400">{celebrity.sport}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Categories */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-gray-400">Browse by Category</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  className="p-3 bg-gray-800 rounded-lg hover:bg-gray-700 flex items-center gap-2"
+                  onClick={() => setSearchQuery("Cricket")}
+                >
+                  <Cricket className="h-5 w-5 text-blue-400" />
+                  <span>Cricket</span>
+                </button>
+                <button
+                  className="p-3 bg-gray-800 rounded-lg hover:bg-gray-700 flex items-center gap-2"
+                  onClick={() => setSearchQuery("Acting")}
+                >
+                  <Film className="h-5 w-5 text-red-400" />
+                  <span>Bollywood</span>
+                </button>
+                <button
+                  className="p-3 bg-gray-800 rounded-lg hover:bg-gray-700 flex items-center gap-2"
+                  onClick={() => setSearchQuery("Basketball")}
+                >
+                  <User className="h-5 w-5 text-orange-400" />
+                  <span>Basketball</span>
+                </button>
+                <button
+                  className="p-3 bg-gray-800 rounded-lg hover:bg-gray-700 flex items-center gap-2"
+                  onClick={() => setSearchQuery("Tennis")}
+                >
+                  <User className="h-5 w-5 text-green-400" />
+                  <span>Tennis</span>
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="bg-gray-800 p-4 rounded-lg">
-              <div className="font-medium text-lg">{selectedCelebrity.name}</div>
-              <div className="text-gray-400">{selectedCelebrity.sport}</div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-700">
+                  {selectedCelebrity.imageUrl ? (
+                    <Image
+                      src={selectedCelebrity.imageUrl || "/placeholder.svg"}
+                      alt={selectedCelebrity.name}
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white font-bold text-xl">
+                      {selectedCelebrity.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="font-medium text-lg">{selectedCelebrity.name}</div>
+                  <div className="text-gray-400">{selectedCelebrity.sport}</div>
+                </div>
+              </div>
               {selectedCelebrity.description && <div className="mt-2 text-sm">{selectedCelebrity.description}</div>}
             </div>
 

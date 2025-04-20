@@ -66,7 +66,73 @@ export async function GET(request: NextRequest) {
         duration: 30,
         tags: ["basketball", "nba", "goat"],
       },
-      // Add more mock reels here
+      {
+        id: "2",
+        celebrity: {
+          id: "201",
+          name: "Virat Kohli",
+          sport: "Cricket",
+        },
+        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        thumbnailUrl: "/placeholder.svg?height=720&width=405",
+        description:
+          "The journey of Virat Kohli from a young Delhi cricketer to becoming one of the greatest batsmen in cricket history.",
+        likes: 25678,
+        comments: 789,
+        createdAt: new Date().toISOString(),
+        duration: 35,
+        tags: ["cricket", "india", "batsman"],
+      },
+      {
+        id: "3",
+        celebrity: {
+          id: "202",
+          name: "MS Dhoni",
+          sport: "Cricket",
+        },
+        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        thumbnailUrl: "/placeholder.svg?height=720&width=405",
+        description:
+          "The remarkable story of MS Dhoni, from a railway ticket collector to India's most successful captain.",
+        likes: 23456,
+        comments: 678,
+        createdAt: new Date().toISOString(),
+        duration: 33,
+        tags: ["cricket", "india", "captain"],
+      },
+      {
+        id: "4",
+        celebrity: {
+          id: "203",
+          name: "Rohit Sharma",
+          sport: "Cricket",
+        },
+        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        thumbnailUrl: "/placeholder.svg?height=720&width=405",
+        description: "Rohit Sharma's rise to becoming one of cricket's most explosive batsmen and successful captains.",
+        likes: 19876,
+        comments: 543,
+        createdAt: new Date().toISOString(),
+        duration: 31,
+        tags: ["cricket", "india", "hitman"],
+      },
+      {
+        id: "5",
+        celebrity: {
+          id: "301",
+          name: "Akshay Kumar",
+          sport: "Acting",
+        },
+        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        thumbnailUrl: "/placeholder.svg?height=720&width=405",
+        description:
+          "The inspiring journey of Akshay Kumar from martial artist to becoming one of Bollywood's most successful actors.",
+        likes: 21345,
+        comments: 654,
+        createdAt: new Date().toISOString(),
+        duration: 34,
+        tags: ["bollywood", "actor", "action"],
+      },
     ]
 
     return NextResponse.json({

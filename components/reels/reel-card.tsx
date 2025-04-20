@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import type { Reel } from "@/lib/types"
-import { Heart, MessageCircle, Share2, Volume2, VolumeX, AlertCircle } from "lucide-react"
+import { Heart, MessageCircle, Share2, Volume2, VolumeX } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import Link from "next/link"
 
@@ -16,100 +16,79 @@ interface ReelCardProps {
 }
 
 export default function ReelCard({ reel, isActive, isMobile }: ReelCardProps) {
+  // Basic state
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
   const [isLiked, setIsLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(reel.likes)
-  const [showShareDisabledMessage, setShowShareDisabledMessage] = useState(false)
+
+  // Refs
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  // InView hook
   const { ref, inView } = useInView({
     threshold: 0.7,
   })
 
+  // Handle video playback based on visibility
   useEffect(() => {
-    if (videoRef.current) {
-      if (isActive && inView) {
-        videoRef.current.play().catch((err) => console.error("Video play error:", err))
-        setIsPlaying(true)
-      } else {
-        videoRef.current.pause()
-        setIsPlaying(false)
-      }
+    if (!videoRef.current) return
+
+    if (isActive && inView) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.error("Video play error:", err))
+    } else {
+      videoRef.current.pause()
+      setIsPlaying(false)
     }
   }, [isActive, inView])
 
-  useEffect(() => {
-    // Hide share disabled message after 3 seconds
-    if (showShareDisabledMessage) {
-      const timer = setTimeout(() => {
-        setShowShareDisabledMessage(false)
-      }, 3000)
+  // Simple handlers with no destructuring
+  function handlePlayPause() {
+    if (!videoRef.current) return
 
-      return () => clearTimeout(timer)
-    }
-  }, [showShareDisabledMessage])
-
-  const togglePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause()
-        setIsPlaying(false)
-      } else {
-        videoRef.current.play().catch((err) => console.error("Video play error:", err))
-        setIsPlaying(true)
-      }
+    if (isPlaying) {
+      videoRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.error("Video play error:", err))
     }
   }
 
-  const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted
-      setIsMuted(!isMuted)
-    }
+  function handleMuteToggle(event: React.MouseEvent) {
+    event.stopPropagation()
+    if (!videoRef.current) return
+
+    videoRef.current.muted = !isMuted
+    setIsMuted(!isMuted)
   }
 
-  // Update the handleLike function to actually call an API
-  const handleLike = async (e: React.MouseEvent) => {
-    e.stopPropagation()
-
-    try {
-      const response = await fetch(`/api/reels/${reel.id}/like`, {
-        method: isLiked ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update like status")
-      }
-
-      // Update local state
-      if (isLiked) {
-        setLikeCount((prev) => prev - 1)
-      } else {
-        setLikeCount((prev) => prev + 1)
-      }
-      setIsLiked(!isLiked)
-    } catch (error) {
-      console.error("Error updating like:", error)
-      // Show error toast or notification here
-    }
+  function handleLikeToggle(event: React.MouseEvent) {
+    event.stopPropagation()
+    setIsLiked(!isLiked)
   }
 
-  // Update the share button to show disabled message
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setShowShareDisabledMessage(true)
+  function handleCommentClick(event: React.MouseEvent) {
+    event.stopPropagation()
+    // Navigation handled by Link component
+  }
+
+  function handleShareClick(event: React.MouseEvent) {
+    event.stopPropagation()
+    console.log("Share clicked")
   }
 
   return (
     <div
       ref={ref}
       className="w-full h-screen flex items-center justify-center snap-start relative"
-      onClick={togglePlayPause}
+      onClick={handlePlayPause}
     >
+      {/* Video element */}
       <video
         ref={videoRef}
         src={reel.videoUrl}
@@ -120,16 +99,10 @@ export default function ReelCard({ reel, isActive, isMobile }: ReelCardProps) {
         poster={reel.thumbnailUrl}
       />
 
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
 
-      {/* Share disabled message */}
-      {showShareDisabledMessage && (
-        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 z-20 animate-fade-in-down">
-          <AlertCircle className="h-5 w-5 text-yellow-500" />
-          <span className="text-sm">Sharing is currently disabled</span>
-        </div>
-      )}
-
+      {/* Bottom info section */}
       <div className="absolute bottom-0 left-0 p-4 w-full z-10">
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden mr-3">
@@ -156,20 +129,27 @@ export default function ReelCard({ reel, isActive, isMobile }: ReelCardProps) {
         <p className="mb-4 text-sm max-w-[85%] line-clamp-3 md:line-clamp-none">{reel.description}</p>
       </div>
 
+      {/* Action buttons */}
       <div className="absolute right-4 bottom-20 md:bottom-24 flex flex-col items-center space-y-6">
-        <button className="flex flex-col items-center" onClick={handleLike} aria-label={isLiked ? "Unlike" : "Like"}>
+        {/* Like button */}
+        <button
+          className="flex flex-col items-center"
+          onClick={handleLikeToggle}
+          aria-label={isLiked ? "Unlike" : "Like"}
+        >
           <div
             className={`w-10 h-10 rounded-full ${isLiked ? "bg-red-500/80" : "bg-gray-800/60"} flex items-center justify-center mb-1`}
           >
             <Heart className={`w-6 h-6 ${isLiked ? "fill-white" : ""}`} />
           </div>
-          <span className="text-xs">{likeCount}</span>
+          <span className="text-xs">{reel.likes}</span>
         </button>
 
+        {/* Comments link */}
         <Link
           href={`/reel/${reel.id}/comments`}
           className="flex flex-col items-center"
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleCommentClick}
           aria-label="Comments"
         >
           <div className="w-10 h-10 rounded-full bg-gray-800/60 flex items-center justify-center mb-1">
@@ -178,10 +158,11 @@ export default function ReelCard({ reel, isActive, isMobile }: ReelCardProps) {
           <span className="text-xs">{reel.comments}</span>
         </Link>
 
+        {/* Share button */}
         <button
           className="flex flex-col items-center opacity-50 cursor-not-allowed"
-          onClick={handleShare}
-          aria-label="Share (Disabled)"
+          onClick={handleShareClick}
+          aria-label="Share"
         >
           <div className="w-10 h-10 rounded-full bg-gray-800/60 flex items-center justify-center mb-1">
             <Share2 className="w-6 h-6" />
@@ -189,7 +170,12 @@ export default function ReelCard({ reel, isActive, isMobile }: ReelCardProps) {
           <span className="text-xs">Share</span>
         </button>
 
-        <button className="flex flex-col items-center" onClick={toggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>
+        {/* Mute/unmute button */}
+        <button
+          className="flex flex-col items-center"
+          onClick={handleMuteToggle}
+          aria-label={isMuted ? "Unmute" : "Mute"}
+        >
           <div className="w-10 h-10 rounded-full bg-gray-800/60 flex items-center justify-center">
             {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
           </div>

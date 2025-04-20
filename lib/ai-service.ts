@@ -13,14 +13,38 @@ const pollyClient = new PollyClient({
 })
 
 export async function generateCelebrityScript(celebrity: Celebrity): Promise<string> {
-  const prompt = `
-    Create a short, engaging script about ${celebrity.name}, the ${celebrity.sport} legend.
-    Focus on their career highlights, achievements, and impact on the sport.
-    Include specific statistics, records, championships, and memorable moments.
-    Keep it concise (around 100-150 words) and make it engaging for social media.
-    Format it as a narrative that could be read by a voiceover for a short video.
-    Do not include any introductory phrases like "Here's the script:" - just provide the script text.
-  `
+  let prompt = ""
+
+  if (celebrity.sport === "Cricket") {
+    prompt = `
+      Create a short, engaging script about ${celebrity.name}, the ${celebrity.sport} legend from India.
+      Focus on their career highlights, achievements, records, and impact on the sport.
+      Include specific statistics, memorable matches, championships, and iconic moments.
+      For Indian cricketers, mention their role in World Cup victories, IPL performances, and captaincy if applicable.
+      Keep it concise (around 100-150 words) and make it engaging for social media.
+      Format it as a narrative that could be read by a voiceover for a short video.
+      Do not include any introductory phrases like "Here's the script:" - just provide the script text.
+    `
+  } else if (celebrity.sport === "Acting") {
+    prompt = `
+      Create a short, engaging script about ${celebrity.name}, the Bollywood superstar.
+      Focus on their career highlights, iconic films, awards, and impact on Indian cinema.
+      Include specific blockbuster movies, memorable roles, box office records, and their journey in the film industry.
+      Mention any unique aspects like action sequences, comedy timing, or social message films they're known for.
+      Keep it concise (around 100-150 words) and make it engaging for social media.
+      Format it as a narrative that could be read by a voiceover for a short video.
+      Do not include any introductory phrases like "Here's the script:" - just provide the script text.
+    `
+  } else {
+    prompt = `
+      Create a short, engaging script about ${celebrity.name}, the ${celebrity.sport} legend.
+      Focus on their career highlights, achievements, and impact on the sport.
+      Include specific statistics, records, championships, and memorable moments.
+      Keep it concise (around 100-150 words) and make it engaging for social media.
+      Format it as a narrative that could be read by a voiceover for a short video.
+      Do not include any introductory phrases like "Here's the script:" - just provide the script text.
+    `
+  }
 
   const { text } = await generateText({
     model: openai("gpt-4o"),

@@ -2,15 +2,24 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Plus, Settings, Trash2 } from "lucide-react"
+import { ArrowLeft, Plus, Settings, Trash2, LogOut } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import type { Reel } from "@/lib/types"
+import { useAuth } from "@/context/auth-context"
 
 export default function ProfilePage() {
   const router = useRouter()
+  const { user, logout } = useAuth()
   const [reels, setReels] = useState<Reel[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!user && !isLoading) {
+      router.push("/auth/login")
+    }
+  }, [user, isLoading, router])
 
   useEffect(() => {
     // In a real app, fetch user's reels from an API
@@ -20,37 +29,38 @@ export default function ProfilePage() {
         {
           id: "1",
           celebrity: {
-            id: "101",
-            name: "Michael Jordan",
-            sport: "Basketball",
+            id: "201",
+            name: "Virat Kohli",
+            sport: "Cricket",
             imageUrl: "/placeholder.svg?height=40&width=40",
           },
-          videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+          videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
           thumbnailUrl: "/placeholder.svg?height=720&width=405",
           description:
-            "Michael Jordan's journey from North Carolina to becoming the greatest basketball player of all time.",
-          likes: 15243,
-          comments: 342,
+            "The journey of Virat Kohli from a young Delhi cricketer to becoming one of the greatest batsmen in cricket history.",
+          likes: 25678,
+          comments: 789,
           createdAt: new Date().toISOString(),
-          duration: 30,
-          tags: ["basketball", "nba", "goat"],
+          duration: 35,
+          tags: ["cricket", "india", "batsman"],
         },
         {
           id: "2",
           celebrity: {
-            id: "102",
-            name: "Serena Williams",
-            sport: "Tennis",
+            id: "202",
+            name: "MS Dhoni",
+            sport: "Cricket",
             imageUrl: "/placeholder.svg?height=40&width=40",
           },
-          videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+          videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
           thumbnailUrl: "/placeholder.svg?height=720&width=405",
-          description: "The incredible story of Serena Williams dominating tennis for over two decades.",
-          likes: 12453,
-          comments: 231,
+          description:
+            "The remarkable story of MS Dhoni, from a railway ticket collector to India's most successful captain.",
+          likes: 23456,
+          comments: 678,
           createdAt: new Date().toISOString(),
-          duration: 28,
-          tags: ["tennis", "grandslam", "legend"],
+          duration: 33,
+          tags: ["cricket", "india", "captain"],
         },
       ])
       setIsLoading(false)
@@ -76,6 +86,16 @@ export default function ProfilePage() {
     }
   }
 
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to log out?")) {
+      logout()
+    }
+  }
+
+  if (!user) {
+    return null // Will redirect in useEffect
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="p-4 flex items-center justify-between bg-black sticky top-0 z-10 border-b border-gray-800">
@@ -85,21 +105,26 @@ export default function ProfilePage() {
           </Link>
           <h1 className="text-lg font-bold">My Profile</h1>
         </div>
-        <Link href="/settings" className="p-2 rounded-full hover:bg-gray-800">
-          <Settings className="h-5 w-5" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/settings" className="p-2 rounded-full hover:bg-gray-800">
+            <Settings className="h-5 w-5" />
+          </Link>
+          <button onClick={handleLogout} className="p-2 rounded-full hover:bg-gray-800">
+            <LogOut className="h-5 w-5 text-red-500" />
+          </button>
+        </div>
       </div>
 
       <div className="p-4">
         <div className="flex items-center gap-4 mb-8">
           <div className="w-20 h-20 rounded-full bg-gray-700 overflow-hidden">
             <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold">
-              U
+              {user.name.charAt(0).toUpperCase()}
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-bold">User123</h2>
-            <p className="text-gray-400">Sports enthusiast</p>
+            <h2 className="text-xl font-bold">{user.name}</h2>
+            <p className="text-gray-400">{user.email}</p>
           </div>
         </div>
 
